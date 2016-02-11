@@ -1,0 +1,16 @@
+{
+  "name": "fiso_rss",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Peter Brandt <peter.m.brandt@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "koat": "^1.0.1",
+    "scrapequest": "^1.0.0",
+    "sqlite3": "^3.1.1"
+  }
+}
