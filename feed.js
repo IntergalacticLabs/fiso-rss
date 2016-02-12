@@ -21,7 +21,7 @@ function item(episode) {
       <link>${episode.link}</link>
       <description>${episode.description}</description>
       <pubDate>${episode.pubdate}</pubDate>
-      <enclosure url="${episode.enclosure_url}" length="${episode.enclosure_length}" type="${episode.enclusure_type}"/>
+      <enclosure url="${episode.enclosure_url}" length="${episode.enclosure_length}" type="${episode.enclosure_type}"/>
       <itunes:subtitle>${episode.title}</itunes:subtitle>
       <itunes:summary>${episode.description}</itunes:summary>
       <itunes:image href="${episode.image}" />
@@ -42,12 +42,12 @@ function rss(items) {
     <itunes:new-feed-url>http://intergalacticlabs.co/podcasts/fiso-rss.xml</itunes:new-feed-url>
     <itunes:author>FISO Working Group</itunes:author>
     <itunes:subtitle>Weekly presentations from NASA, industry, and academic leaders in the aerospace field.</itunes:subtitle>
-    <itunes:summary>The FISO (Future In-Space Operations) Telecon Series is a weekly meeting that brings space technology, engineering, and science to the widespread space community with presentations from leaders in their field.</itunes:summary>
+    <itunes:summary>The FISO (Future In-Space Operations) Telecon Series is a weekly meeting that brings space technology, engineering, and science to the widespread space community with presentations from leaders in their field.  Source: http://spirit.as.utexas.edu/~fiso/archivelist.htm</itunes:summary>
     <itunes:owner>
         <itunes:name>Peter Brandt</itunes:name>
         <itunes:email>peter.m.brandt@gmail.com</itunes:email>
     </itunes:owner>
-    <itunes:image href="https://planetary.s3.amazonaws.com/assets/images/society/radio/planetary-radio-itunes-logo.png"/>
+    <itunes:image href="https://s3.amazonaws.com/fiso-podcast/logo-min.png"/>
     <itunes:category text="Science &amp; Medicine">
     <itunes:category text="Natural Sciences"/>
     </itunes:category>

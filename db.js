@@ -1,7 +1,7 @@
 'use strict';
 var sqlite3 = require('sqlite3')
 var db = new sqlite3.Database('podcast.db')
-var upserter = require('./upsert')
+var upserter = require('sqlite3-upsert')
 
 // Just run "node db" to initialize the database
 if (!module.parent) {
@@ -13,7 +13,7 @@ if (!module.parent) {
     pubdate text,
     enclosure_url text,
     enclosure_length int,
-    enclusure_type text,
+    enclosure_type text,
     subtitle text,
     image text
   )`, (e) => {
