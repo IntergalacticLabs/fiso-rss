@@ -4,11 +4,11 @@ var star = require('thunkify-wrap').genify;
 var feed = star(require('./feed'))
 var fork = require('child_process').fork;
 
-app.get('/fiso-rss.xml', function *() {
+app.get('/fiso/rss', function *() {
   this.body = yield feed()
 })
 
-app.get('/scrape', function *() {
+app.get('/fiso/scrape', function *() {
   fork('./scrape.js')
   this.body = 'Scraping! 🍻'
 })

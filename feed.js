@@ -39,7 +39,7 @@ function rss(items) {
     <managingEditor>peter.m.brandt@gmail.com (Peter Brandt)</managingEditor>
     <generator>Node.js</generator>
     <language>en-us</language>
-    <itunes:new-feed-url>http://intergalacticlabs.co/podcasts/fiso-rss.xml</itunes:new-feed-url>
+    <itunes:new-feed-url>http://intergalacticlabs.co/podcasts/fiso/rss</itunes:new-feed-url>
     <itunes:author>FISO Working Group</itunes:author>
     <itunes:subtitle>Weekly presentations from NASA, industry, and academic leaders in the aerospace field.</itunes:subtitle>
     <itunes:summary>The FISO (Future In-Space Operations) Telecon Series is a weekly meeting that brings space technology, engineering, and science to the widespread space community with presentations from leaders in their field.  Source: http://spirit.as.utexas.edu/~fiso/archivelist.htm</itunes:summary>
@@ -52,7 +52,7 @@ function rss(items) {
     <itunes:category text="Natural Sciences"/>
     </itunes:category>
     <itunes:explicit>no</itunes:explicit>
-    <atom:link href="http://intergalacticlabs.co/podcasts/fiso-rss.xml" rel="self" type="application/rss+xml"/>
+    <atom:link href="http://intergalacticlabs.co/podcasts/fiso/rss" rel="self" type="application/rss+xml"/>
 ${items}
   </channel>
 </rss>`;
