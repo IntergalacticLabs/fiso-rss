@@ -16,7 +16,7 @@ module.exports = function (cb) {
 
 function item(episode) {
   return `    <item>
-      <guid isPermaLink="false">${episode.guid}</guid>
+      <guid isPermaLink="false">${episode.enclosure_url}</guid>
       <title>${episode.title}</title>
       <link>${episode.link}</link>
       <description>${episode.description}</description>
