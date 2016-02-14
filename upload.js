@@ -19,6 +19,7 @@ module.exports = function(url, key, callback) {
       Bucket: BUCKET,
       ACL: 'public-read',
       Key: key,
+      StorageClass: 'STANDARD_IA',
       Body: stream
     };
 
