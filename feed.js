@@ -67,7 +67,7 @@ module.exports = function (cb) {
             {'itunes:subtitle': item.title},
             {'itunes:image': {
               _attr: {
-                href: 'https://s3.amazonaws.com/fiso-podcast/logo-min.png'
+                href: 'http://s3.amazonaws.com/fiso-podcast/logo-min.png'
               }
             }},
             // {'itunes:duration': '7:04'}
