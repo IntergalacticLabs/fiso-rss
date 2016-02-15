@@ -1,4 +1,44 @@
 var db = require('./db')
+var RSS = require('rss')
+var _ = require('lodash')
+
+var feed = {
+  title: 'Future In-Space Operations (FISO) Working Group Presentations',
+  description: 'Weekly presentations from NASA, industry, and academic leaders in the aerospace field.',
+  feed_url: 'http://intergalacticlabs.co/podcasts/fiso/rss',
+  site_url: 'http://spirit.as.utexas.edu/~fiso/archivelist.htm',
+  image_url: 'http://s3.amazonaws.com/fiso-podcast/logo-min.png',
+  managingEditor: 'peter.m.brandt@gmail.com (Peter Brandt)',
+  webMaster: 'peter.m.brandt@gmail.com (Peter Brandt)',
+  categories: ['Science & Medicine', 'Natural Sciences'],
+  langualge: 'en-us',
+  custom_namespaces: {'itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd'},
+  custom_elements: [
+      {'itunes:subtitle': 'Weekly presentations from NASA, industry, and academic leaders in the aerospace field.'},
+      {'itunes:author': 'FISO Working Group'},
+      {'itunes:summary': 'The FISO (Future In-Space Operations) Telecon Series is a weekly meeting that brings space technology, engineering, and science to the widespread space community with presentations from leaders in their field.  Source: http://spirit.as.utexas.edu/~fiso/archivelist.htm'},
+      {'itunes:owner': [
+        {'itunes:name': 'Peter Brandt'},
+        {'itunes:email': 'peter.m.brandt@gmail.com'}
+      ]},
+      {'itunes:image': {
+        _attr: {
+          href: 'http://s3.amazonaws.com/fiso-podcast/logo-min.png'
+        }
+      }},
+      {'itunes:category': [
+        {_attr: {
+          text: 'Science & Medicine'
+        }},
+        {'itunes:category': {
+          _attr: {
+            text: 'Natural Sciences'
+          }
+        }}
+      ]},
+      {'itunes:explicit': 'no'}
+    ]
+};
 
 //http://www.apple.com/itunes/podcasts/specs.html
 module.exports = function (cb) {
@@ -8,9 +48,36 @@ module.exports = function (cb) {
         console.error(e);
         return cb(e)
       }
-      var items = episodes.map(item).join('\n');
-      var feed = rss(items);
-      cb(null, feed)
+      var rss = new RSS(feed)
+      episodes.map(function(item) {
+        // check for bad characters
+        item.title = item.title.replace(/[^\u0000-\u007F]/g, '');
+
+        var options = {
+          url: item.link,
+          guid: item.link,
+          date: item.pubDate,
+          enclosure: {
+            url: item.enclosure_url,
+            size: item.enclosure_length,
+            type: item.enclosure_type
+          },
+          custom_elements: [
+            {'itunes:author': 'Peter Brandt'},
+            {'itunes:subtitle': item.title},
+            {'itunes:image': {
+              _attr: {
+                href: 'https://s3.amazonaws.com/fiso-podcast/logo-min.png'
+              }
+            }},
+            // {'itunes:duration': '7:04'}
+          ]
+        };
+
+        rss.item(_.merge({}, item, options))
+      });
+      var xml = rss.xml({indent: true});
+      cb(null, xml);
     })
 }
 

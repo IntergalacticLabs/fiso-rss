@@ -11,7 +11,9 @@
   "dependencies": {
     "aws-sdk": "^2.2.34",
     "koat": "^1.0.1",
+    "lodash": "^4.3.0",
     "node-cron": "^1.0.0",
+    "rss": "^1.2.1",
     "scrapequest": "^1.0.0",
     "sqlite3": "^3.1.1",
     "sqlite3-upsert": "^1.0.0",

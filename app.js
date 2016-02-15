@@ -6,6 +6,7 @@ var fork = require('child_process').fork;
 
 app.get('/fiso/rss', function *() {
   this.body = yield feed()
+  this.type = 'text/xml; charset=utf-8'
 })
 
 app.get('/fiso/scrape', function *() {
