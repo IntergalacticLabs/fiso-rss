@@ -11,7 +11,7 @@ var feed = {
   managingEditor: 'peter.m.brandt@gmail.com (Peter Brandt)',
   webMaster: 'peter.m.brandt@gmail.com (Peter Brandt)',
   categories: ['Science & Medicine', 'Natural Sciences'],
-  langualge: 'en-us',
+  language: 'en-us',
   custom_namespaces: {'itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd'},
   custom_elements: [
       {'itunes:subtitle': 'Weekly presentations from NASA, industry, and academic leaders in the aerospace field.'},
@@ -56,9 +56,9 @@ module.exports = function (cb) {
         var options = {
           url: item.link,
           guid: item.link,
-          date: item.pubDate,
+          date: item.pubdate,
           enclosure: {
-            url: item.enclosure_url,
+            url: item.enclosure_url.replace('https', 'http'),
             size: item.enclosure_length,
             type: item.enclosure_type
           },
