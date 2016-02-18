@@ -49,7 +49,9 @@ module.exports = function (cb) {
         return cb(e)
       }
       var rss = new RSS(feed)
-      episodes.map(function(item) {
+      episodes.sort(function(a, b) {
+        return (new Date(b.pubdate) - new Date(a.pubdate));
+      }).map(function(item) {
         // check for bad characters
         item.title = item.title.replace(/[^\u0000-\u007F]/g, '');
 
