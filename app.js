@@ -16,7 +16,7 @@ app.get('/fiso/scrape', function *() {
 
 // oh hey this is also the cron scheduler for scraping
 var cron = require('node-cron')
-cron.schedule('0 7 * * 2', function() {
+cron.schedule('0 19 * * 2', function() {
   fork('./scrape.js');
 })
 
