@@ -73,6 +73,7 @@ function scrape_episode(episode) {
     episode.pubdate = (new Date(episode.guid.match(/(\d+-\d+-\d+)/)[1])).toString();
 
     var desc = [
+      '<h3>' + episode.speaker + '</h3>',
       '<ul>'
     ]
 
@@ -99,11 +100,9 @@ function scrape_episode(episode) {
           if (a.match(/\.mp3$/)) {
             episode.enclosure_url = file.Location;
             episode.enclosure_length = file.length;
-            episode.enclosure_type = 'audio/mpeg'
-          } else {
-            episode.description += '\n' + file.Location;
+            episode.enclosure_type = 'audio/mpeg';
+            db.upsert_episode(episode, console.log.bind(console))
           }
-          db.upsert_episode(episode, console.log.bind(console))
         })
       },  i * 60 * 1000)
     })
