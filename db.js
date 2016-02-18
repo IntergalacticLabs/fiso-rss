@@ -15,7 +15,8 @@ if (!module.parent) {
     enclosure_length int,
     enclosure_type text,
     subtitle text,
-    image text
+    image text,
+    speaker text
   )`, (e) => {
     console.log(e);
     console.log('database initialized')

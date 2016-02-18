@@ -1,30 +1,52 @@
 var db = require('./db')
 var scrapequest = require('scrapequest')
 var upload = require('./upload')
+var cheerio = require('cheerio')
+var request = require('request')
 
-scrapequest.interval = 1 * 60 * 1000;
+var freshScrape = function(url, cb) {
+  request(url, function(e, r, b) {
+    if (e) {
+      return cb(e)
+    }
+    var $ = cheerio.load(b);
+    cb(null, $);
+  })
+}
 
-scrapequest.scrape('http://spirit.as.utexas.edu/~fiso/archivelist.htm', (e, $) => {
+freshScrape('http://spirit.as.utexas.edu/~fiso/archivelist.htm', (e, $) => {
   if (e) { return console.error(e) }
 
   var links = $('a').get().map((a) => {
-    return {
+    var episode = {
       guid: $(a).attr('href').split('/').slice(-2)[0], // Zuniga_2-10-16
       link: $(a).attr('href'), // url like http://spirit.as.utexas.edu/~fiso/telecon/Zuniga_2-10-16/
       title: $(a).text().replace(/\"/g, '').replace(/\s/g, ' ').trim()
     }
+
+    // attempt to get the speaker
+    var speaker = episode.guid.split('_')[0];
+    episode.speaker = $($(`span:contains(${speaker})`)[0]).text().replace(/\s+/g, ' ').replace(' ,', ',').trim()
+    var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+
+    months.map(function(month) {
+      episode.speaker = episode.speaker.split(month)[0].trim();
+    })
+    return episode;
   }).filter((l) => {
     return l.title && l.link && l.link.indexOf('fiso/telecon') >=0;
   }).map((ep) => {
-    db.upsert_episode(ep, function(e, episode) {
-      if (!episode.enclosure_url) {
-        scrape_episode(episode)
+    db.all(`select * from episode_tbl where guid = ?`, ep.guid, function(err, rows) {
+      if (err) { return console.error(err) }
+      if (rows.length === 0) {
+        db.upsert_episode(ep, function(e, episode) {
+          if (!episode.enclosure_url) {
+            scrape_episode(episode)
+          }
+        })
       }
     })
   })
-
-  console.log(links.length)
-  console.log('done');
 })
 
 
@@ -41,16 +63,34 @@ function scrape_episode(episode) {
         return episode.link + a;
       }
     })
-    console.log(links);
+
+    var awskeys = links.map(function(l) {
+      return 'https://s3.amazonaws.com/fiso-podcast/' + episode.link.split('/').slice(-2)[0] + '/' + l.split('/').slice(-1)[0]
+    })
 
     episode.subtitle = episode.guid;
-    episode.description = episode.title + '\n' + episode.guid + '\n' + episode.link;
     episode.image = 'https://s3.amazonaws.com/fiso-podcast/logo-min.png';
     episode.pubdate = (new Date(episode.guid.match(/(\d+-\d+-\d+)/)[1])).toString();
 
+    var desc = [
+      '<ul>'
+    ]
+
+    desc.push('<li><a href="' + episode.link + '">' + decodeURIComponent(episode.link) + '</a></li>')
+
+    awskeys.map(function(l) {
+      l = decodeURIComponent(l);
+      var lname = l.split('/').slice(-1)[0];
+      desc.push('<li><a href="' + l + '">' + l + '</a></li>')
+    })
+
+    desc.push('</ul>')
+    episode.description = desc.join('\n')
+
+    db.upsert_episode(episode);
 
     // upload the links
-    links.map((a) => {
+    links.map((a, i) => {
       var key = episode.guid + '/' + a.split('/').pop();
       setTimeout(() => {
         console.log('uploading ' + key + ' from ' + a)
@@ -65,7 +105,7 @@ function scrape_episode(episode) {
           }
           db.upsert_episode(episode, console.log.bind(console))
         })
-      },  Math.random() * .5 * 60 * 1000)
+      },  i * 60 * 1000)
     })
   })
 }
