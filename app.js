@@ -5,6 +5,9 @@ var feed = star(require('./feed'))
 var fork = require('child_process').fork;
 
 app.get('/fiso/rss', function *() {
+  this.set('Cache-Control', 'no-store, no-cache, must-revalidate')
+  this.set('Pragma', 'no-cache')
+  this.set('Expires', 0)
   this.body = yield feed()
   this.type = 'text/xml; charset=utf-8'
 })
